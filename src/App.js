@@ -5,17 +5,18 @@ import { Map, Marker, Popup, TileLayer, FeatureGroup } from 'react-leaflet';
 class OneMap extends Component {
 
   render() {
-    const position = [60.162059, 24.945831]; // Default to Helsinki's center
+    const position = [60.172059, 24.945831]; // Default to Helsinki's center
     const bounds = [
       [59.9, 24.59],  // SouthWest corner
       [60.43, 25.3]  // NorthEast corner
     ];
 
     return (
-      <Map center={position} zoom={14} minZoom={8} maxZoom={15} zoomControl={true} maxBounds={bounds}>
+      <Map center={position} zoom={13}>
         <TileLayer
           url='http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          minZoom={10} maxZoom={16} zoomControl={true}
         />
         <Marker position={position}>
           <Popup>
