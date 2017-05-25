@@ -2,6 +2,14 @@ import React, { Component } from 'react';
 
 import { Map, Marker, Popup, TileLayer, FeatureGroup } from 'react-leaflet';
 
+function createMarkup() {
+    return {__html: 'First &middot; Second'};
+}
+
+function Content(props) {
+    return <div dangerouslySetInnerHTML={{__html: props.content}} />;
+}
+
 class OneMap extends Component {
 
   render() {
@@ -20,7 +28,7 @@ class OneMap extends Component {
             return (
                 <Marker key={feature.properties.name} position={feature.geometry.coordinates.reverse()}>
                     <Popup>
-                        {feature.properties.description}
+                        <Content content={feature.properties.description} />
                     </Popup>
                 </Marker>
             );
