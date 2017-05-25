@@ -11,20 +11,34 @@ class OneMap extends Component {
       [60.43, 25.3]  // NorthEast corner
     ];
 
-    return (
-      <Map center={position} zoom={13}>
-        <TileLayer
-          url='http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'
-          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          minZoom={10} maxZoom={16} zoomControl={true}
-        />
-        <Marker position={position}>
-          <Popup>
-            <span>A pretty CSS3 popup.<br/>Easily customizable.</span>
-          </Popup>
-        </Marker>
-      </Map>
-    );
+    const places = this.props.places;
+    if (places) {
+        let markers = places.features.map((feature) => {
+
+            if (!feature.geometry) return null;
+
+            return (
+                <Marker key={feature.properties.name} position={feature.geometry.coordinates.reverse()}>
+                    <Popup>
+                        {feature.properties.description}
+                    </Popup>
+                </Marker>
+            );
+        });
+
+        return (
+            <Map center={position} zoom={13}>
+                <TileLayer
+                    url='http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'
+                    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                    minZoom={10} maxZoom={16} zoomControl={true}
+                />
+                {markers}
+            </Map>
+        );
+    } else {
+        return null;
+    }
   }
 }
 
@@ -46,14 +60,14 @@ class OneMap extends Component {
 */
 
 
-const fetch_places = () => {
+const fetch_places = (f) => {
     fetch('//localhost:9000/place_data/').then(function(response) {
         // Convert to JSON
         return response.json();
     }).then(function(data) {
         // Yay, `j` is a JavaScript object
         console.log(data);
-        return data;
+        f(data);
     });
 };
 
@@ -65,7 +79,7 @@ class App extends Component {
     }
 
     get_data() {
-        this.setState({places: fetch_places()});
+        fetch_places(data => this.setState({places: data}));
     }
 
     componentDidMount() {
@@ -75,7 +89,7 @@ class App extends Component {
     render() {
         return (
           <div id="map">
-            <OneMap />
+            <OneMap places={this.state.places} />
           </div>
         );
     }
