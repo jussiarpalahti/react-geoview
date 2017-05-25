@@ -45,14 +45,40 @@ class OneMap extends Component {
 >{contents}</FeatureGroup>
 */
 
+
+const fetch_places = () => {
+    fetch('//localhost:9000/place_data/').then(function(response) {
+        // Convert to JSON
+        return response.json();
+    }).then(function(data) {
+        // Yay, `j` is a JavaScript object
+        console.log(data);
+        return data;
+    });
+};
+
+
 class App extends Component {
-  render() {
-    return (
-      <div id="map">
-        <OneMap />
-      </div>
-    );
-  }
+    constructor(props) {
+        super(props);
+        this.state = {places: false};
+    }
+
+    get_data() {
+        this.setState({places: fetch_places()});
+    }
+
+    componentDidMount() {
+        this.get_data();
+    }
+
+    render() {
+        return (
+          <div id="map">
+            <OneMap />
+          </div>
+        );
+    }
 }
 
 export default App;
