@@ -1,6 +1,17 @@
 import React, { Component } from 'react';
 
-import { Map, Marker, Popup, TileLayer, FeatureGroup } from 'react-leaflet';
+import { Map, Marker, Popup, TileLayer} from 'react-leaflet';
+
+import * as L from 'leaflet';
+
+function numberIcon (content) {
+    return L.divIcon({
+        className: "number-icon",
+        iconSize: [25, 41],
+        iconAnchor: [10, 44],
+        popupAnchor: [3, -40],
+        html: content});
+}
 
 function createMarkup() {
     return {__html: 'First &middot; Second'};
@@ -21,12 +32,14 @@ class OneMap extends Component {
 
     const places = this.props.places;
     if (places) {
-        let markers = places.features.map((feature) => {
+        let markers = places.features.map((feature, index) => {
 
             if (!feature.geometry) return null;
 
+            let icon = numberIcon(index + 1);
+
             return (
-                <Marker key={feature.properties.name} position={feature.geometry.coordinates.reverse()}>
+                <Marker key={feature.properties.name} position={feature.geometry.coordinates.reverse()} icon={icon}>
                     <Popup>
                         <Content content={feature.properties.description} />
                     </Popup>
@@ -73,8 +86,7 @@ const fetch_places = (f) => {
         // Convert to JSON
         return response.json();
     }).then(function(data) {
-        // Yay, `j` is a JavaScript object
-        console.log(data);
+        console.log("data arrived", data);
         f(data);
     });
 };
