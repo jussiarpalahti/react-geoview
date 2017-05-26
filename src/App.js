@@ -7,7 +7,7 @@ import * as L from 'leaflet';
 function numberIcon (content) {
     return L.divIcon({
         className: "number-icon",
-        iconSize: [25, 41],
+        iconSize: [21, 21],
         iconAnchor: [10, 44],
         popupAnchor: [3, -40],
         html: content});
