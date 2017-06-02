@@ -82,7 +82,7 @@ class OneMap extends Component {
 
 
 const fetch_places = (f) => {
-    fetch('//localhost:9000/place_data/').then(function(response) {
+    fetch('/place_data/').then(function(response) {
         // Convert to JSON
         return response.json();
     }).then(function(data) {
